@@ -1,0 +1,54 @@
+def say(number):
+    if number < 0 or number > 999_999_999_999:
+        raise ValueError("input out of range")
+
+    ones = [
+        "zero", "one", "two", "three", "four", "five",
+        "six", "seven", "eight", "nine"
+    ]
+
+    teens = [
+        "ten", "eleven", "twelve", "thirteen", "fourteen",
+        "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"
+    ]
+
+    tens = [
+        "", "", "twenty", "thirty", "forty",
+        "fifty", "sixty", "seventy", "eighty", "ninety"
+    ]
+
+    def below_thousand(n):
+        result = []
+
+        if n >= 100:
+            result.append(ones[n // 100] + " hundred")
+            n %= 100
+
+        if n >= 20:
+            result.append(tens[n // 10] + ("" if n % 10 == 0 else "-" + ones[n % 10]))
+        elif n >= 10:
+            result.append(teens[n - 10])
+        elif n > 0:
+            result.append(ones[n])
+
+        return " ".join(result)
+
+    if number == 0:
+        return "zero"
+
+    parts = []
+    billions = number // 1_000_000_000
+    millions = (number // 1_000_000) % 1000
+    thousands = (number // 1000) % 1000
+    remainder = number % 1000
+
+    if billions:
+        parts.append(below_thousand(billions) + " billion")
+    if millions:
+        parts.append(below_thousand(millions) + " million")
+    if thousands:
+        parts.append(below_thousand(thousands) + " thousand")
+    if remainder:
+        parts.append(below_thousand(remainder))
+
+    return " ".join(parts)
